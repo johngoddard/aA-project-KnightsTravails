@@ -10,7 +10,7 @@ class KnightPathFinder
 
   def initialize(pos)
     @starting_pos = pos
-    @visited_positions = [pos]
+    @visited_positions = Hash.new(false)
   end
 
   def self.valid_moves(pos)
@@ -24,10 +24,10 @@ class KnightPathFinder
 
   def new_move_positions(pos)
     new_moves = KnightPathFinder.valid_moves(pos).reject do |move|
-      @visited_positions.include?(move)
+      @visited_positions[move] == true
     end
 
-    @visited_positions += new_moves
+    new_moves.each{|move| @visited_positions[move] == true}
     new_moves
   end
 
@@ -45,7 +45,7 @@ class KnightPathFinder
         queue << new_child
       end
     end
-    
+
     move_tree
   end
 
