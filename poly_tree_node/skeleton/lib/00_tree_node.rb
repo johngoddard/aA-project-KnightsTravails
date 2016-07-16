@@ -9,13 +9,13 @@ class PolyTreeNode
   end
 
   def parent=(node)
-    update_children(@parent)
-    @parent = node
+    delete_children(@parent) unless parent.nil?
     node.add_child(self) unless node.nil?
+    @parent = node
   end
 
-  def update_children(parent)
-    parent.children.delete(self) unless parent.nil?
+  def delete_children(parent)
+    parent.children.delete(self)
   end
 
   def add_child(child_node)
@@ -27,6 +27,7 @@ class PolyTreeNode
 
   def remove_child(child)
     raise unless @children.include?(child)
+
     @children.delete(child)
     child.parent = nil
   end

@@ -17,6 +17,7 @@ class TicTacToeNode
     else
       return true if children.any? { |child| child.losing_node?(evaluator) }
     end
+
     false
   end
 
@@ -28,6 +29,7 @@ class TicTacToeNode
     else
       return true if children.all? { |child| child.winning_node?(evaluator) }
     end
+
     false
   end
 
@@ -40,8 +42,10 @@ class TicTacToeNode
     empty_positions.each do |pos|
       next_turn_board = @board.dup
       next_turn_board[pos] = @next_mover_mark
-      children_array << TicTacToeNode.new(next_turn_board,
+
+      new_node = TicTacToeNode.new(next_turn_board,
         opposite_mark(@next_mover_mark), pos)
+      children_array << new_node
     end
 
     children_array
