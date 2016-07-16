@@ -49,6 +49,7 @@ class PolyTreeNode
 
     until queue.empty?
       current = queue.shift
+      
       current.children.each do |child|
         return child if child.value == target_value
         queue << child
