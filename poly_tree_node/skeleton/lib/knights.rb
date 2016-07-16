@@ -4,15 +4,13 @@ class KnightPathFinder
 
   attr_reader :starting_pos, :visited_positions, :queue
 
-  SIZE = 5
+  SIZE = 8
   DELTAS = [[2,1], [2,-1], [-2,1], [-2,-1],
             [-1,2], [1,2], [-1,-2], [1,-2]]
 
   def initialize(pos)
-    @queue = [PolyTreeNode.new(pos)]
     @starting_pos = pos
     @visited_positions = [pos]
-    @move_tree_rec = []
   end
 
   def self.valid_moves(pos)
@@ -33,20 +31,6 @@ class KnightPathFinder
     new_moves
   end
 
-  def build_tree_rec
-    node = @queue.shift
-    @move_tree_rec = [node]
-    moves = new_move_positions(node.value)
-    return @move_tree_rec if moves.count == 0
-    children = moves.map { |move| PolyTreeNode.new(move)}
-    children.each do |child|
-      child.parent = node
-      @queue << child
-    end
-    @move_tree_rec += build_tree_rec
-  end
-
-
   def build_move_tree
     queue = [PolyTreeNode.new(@starting_pos)]
     move_tree = []
@@ -61,6 +45,7 @@ class KnightPathFinder
         queue << new_child
       end
     end
+    
     move_tree
   end
 
@@ -73,27 +58,16 @@ class KnightPathFinder
   def trace_path_back(target_node)
     parent = target_node.parent
     path = [target_node.value]
+
     until parent.nil?
       path << parent.value
       parent = parent.parent
     end
+
     p path.reverse
   end
 
 end
 
-#
 k = KnightPathFinder.new ([0,0])
-# kpf.find_path([6,2]) # => [[0, 0], [1, 2], [2, 4], [3, 6], [5, 5], [7, 6]]
-p "recursive"
-k.build_tree_rec.each do |node|
-  p node.value
-end
-
-j = KnightPathFinder.new ([0,0])
-p "non_recursive"
-j.build_move_tree.each do |node|
-  p node.value
-end
-#
-# p KnightPathFinder.valid_moves([0,0])
+k.find_path([7,6]) # => [[0, 0], [1, 2], [2, 4], [3, 6], [5, 5], [7, 6]]
